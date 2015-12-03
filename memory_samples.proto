@@ -1,0 +1,39 @@
+package sample_file;
+
+enum AccessType
+{
+    READ = 0;
+    WRITE = 1;
+    READ_WRITE = 2; //Unused for now
+    INSTRUCTION = 3;
+}
+
+message MemoryAccess
+{
+    optional uint64 memory_address = 1;
+    optional uint64 access_counter = 2;
+    optional AccessType access_type = 3;
+    optional uint32 thread_id = 4;
+    optional uint64 program_counter = 5;
+}
+
+message Sample
+{
+    optional uint32 window_id = 1;
+    optional MemoryAccess begin = 2;
+    optional MemoryAccess end = 3; //If this field is not set, the sample is considered as dangling.
+}
+
+message Window
+{
+    optional uint64 memaccess_begin = 1;
+    optional uint64 memaccess_end = 2;
+    optional uint64 instr_begin = 3;
+    optional uint64 instr_end = 4;
+}
+
+message Profile
+{
+    repeated Window windows = 1;
+    optional int32 line_size = 2;
+}
