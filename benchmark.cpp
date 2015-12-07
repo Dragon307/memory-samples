@@ -47,20 +47,16 @@ int main(void)
 {
     auto samples = generate_random_samples(10000000);
 
-    ofstream of("benchmark_ofstream.output", ios::binary);
-    google::protobuf::io::OstreamOutputStream* oos = new google::protobuf::io::OstreamOutputStream(&of);
+    OutputSampleFile sample_file("benchmark_ofstream.output");
 
     auto start = chrono::system_clock::now();
 
     for (const auto& sample : samples)
     {
-        writeDelimitedTo_custom(sample, oos);
+        sample_file.write_sample(sample);
     }
 
-    delete oos;
-    of.close();
     auto end = chrono::system_clock::now();
-
     chrono::duration<double> elapsed_seconds = end - start;
     cout << "elapsed time: " << elapsed_seconds.count() << 's' <<endl;
 }

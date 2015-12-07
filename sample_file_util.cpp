@@ -1,6 +1,9 @@
 #include <iostream>
 #include <iomanip>
 
+#include <google/protobuf/io/zero_copy_stream_impl.h>
+
+#include "protobuf_util.h"
 #include "memory_samples.pb.h"
 #include "sample_file_util.h"
 
@@ -48,4 +51,33 @@ void print_sample(const sample_file::Sample& sample)
         cout << "End:" << endl;
         print_memoryaccess(sample.end());
     }
+}
+
+OutputSampleFile::OutputSampleFile(const string& filename) : finalized(false), ofs(filename, ios::binary)
+{
+    if (ofs.fail())
+        throw runtime_error("Could not open the sample file " + filename);
+
+    oos = new google::protobuf::io::OstreamOutputStream(&ofs);
+}
+
+bool OutputSampleFile::write_sample(const sample_file::Sample& sample)
+{
+    return writeDelimitedTo_custom(sample, oos);
+}
+
+void OutputSampleFile::finalize(void)
+{
+    if (!finalized)
+    {
+        delete oos;
+        ofs.close();
+        finalized = true;
+    }
+}
+
+OutputSampleFile::~OutputSampleFile(void)
+{
+    if (!finalized)
+        finalize();
 }
