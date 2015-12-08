@@ -1,5 +1,6 @@
 #include <iostream>
 #include <iomanip>
+#include <ios>
 
 #include <google/protobuf/io/zero_copy_stream_impl.h>
 
@@ -61,9 +62,11 @@ OutputSampleFile::OutputSampleFile(const string& filename) : finalized(false), o
     oos = new google::protobuf::io::OstreamOutputStream(&ofs);
 }
 
-bool OutputSampleFile::write_sample(const sample_file::Sample& sample)
+void OutputSampleFile::write_sample(const sample_file::Sample& sample)
 {
-    return writeDelimitedTo_custom(sample, oos);
+    bool ret =  writeDelimitedTo_custom(sample, oos);
+    if (!ret)
+        throw ios_base::failure("Output error on sample file");
 }
 
 void OutputSampleFile::finalize(void)

@@ -22,7 +22,7 @@ class OutputSampleFile
 
 public:
     OutputSampleFile(const std::string& filename);
-    bool write_sample(const sample_file::Sample& sample);
+    void write_sample(const sample_file::Sample& sample);
     void finalize(void);
     ~OutputSampleFile();
 };
