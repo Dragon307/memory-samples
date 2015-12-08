@@ -45,18 +45,40 @@ vector<sample_file::Sample> generate_random_samples(unsigned nb_samples)
 
 int main(void)
 {
-    auto samples = generate_random_samples(10000000);
+    const unsigned nb_samples = 10000000;
+    cout << "This benchmark will write then read " << nb_samples << " samples" << endl;
 
-    OutputSampleFile sample_file("benchmark_ofstream.output");
+    auto samples = generate_random_samples(nb_samples);
+
+    const std::string filename = "benchmark_ofstream.output";
+    OutputSampleFile output_sample_file(filename);
 
     auto start = chrono::system_clock::now();
 
     for (const auto& sample : samples)
     {
-        sample_file.write_sample(sample);
+        output_sample_file.write_sample(sample);
     }
+    output_sample_file.finalize();
 
     auto end = chrono::system_clock::now();
     chrono::duration<double> elapsed_seconds = end - start;
-    cout << "elapsed time: " << elapsed_seconds.count() << 's' <<endl;
+    cout << "Write time: " << elapsed_seconds.count() << 's' <<endl;
+
+    samples.clear();
+
+    InputSampleFile input_sample_file(filename);
+
+    start = chrono::system_clock::now();
+
+    sample_file::Sample sample;
+    while (input_sample_file.read_sample(sample))
+    {
+        //samples.push_back(sample);
+    }
+
+    end = chrono::system_clock::now();
+    print_sample(samples[0]);
+    elapsed_seconds = end - start;
+    cout << "Read time: " << elapsed_seconds.count() << 's' <<endl;
 }
