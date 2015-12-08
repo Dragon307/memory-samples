@@ -22,6 +22,9 @@ class OutputSampleFile
 
 public:
     OutputSampleFile(const std::string& filename);
+    OutputSampleFile(const OutputSampleFile&) = delete;
+    OutputSampleFile& operator=(const OutputSampleFile&) = delete;
+
     void write_sample(const sample_file::Sample& sample);
     void finalize(void);
     ~OutputSampleFile();
