@@ -27,4 +27,18 @@ public:
     ~OutputSampleFile();
 };
 
+class InputSampleFile
+{
+    bool finalized;
+    std::ifstream ifs;
+    google::protobuf::io::IstreamInputStream* iis;
+
+public:
+    InputSampleFile(const std::string& filename);
+    InputSampleFile(const InputSampleFile&) = delete;
+    InputSampleFile& operator=(const InputSampleFile&) = delete;
+
+    bool read_sample(sample_file::Sample&);
+    ~InputSampleFile();
+};
 #endif

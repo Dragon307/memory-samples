@@ -84,3 +84,29 @@ OutputSampleFile::~OutputSampleFile(void)
     if (!finalized)
         finalize();
 }
+
+InputSampleFile::InputSampleFile(const string& filename) : finalized(false), ifs(filename, ios::binary)
+{
+    if (ifs.fail())
+        throw ios_base::failure("Could not open the sample file " + filename);
+
+    iis = new google::protobuf::io::IstreamInputStream(&ifs);
+}
+
+bool InputSampleFile::read_sample(sample_file::Sample& sample)
+{
+    bool clean_eof;
+
+    const bool ret = readDelimitedFrom_custom(iis, &sample, &clean_eof);
+
+    if (!ret && !clean_eof)
+        throw ios_base::failure("Input error on sample file");
+
+    return ret;
+}
+
+InputSampleFile::~InputSampleFile(void)
+{
+    delete iis;
+    ifs.close();
+}
