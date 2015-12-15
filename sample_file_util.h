@@ -2,6 +2,7 @@
 #define SAMPLE_FILE_UTIL_H
 
 #include <fstream>
+#include <string>
 
 #include <google/protobuf/io/zero_copy_stream_impl.h>
 
@@ -17,6 +18,7 @@ void print_sample(const sample_file::Sample& sample);
 class OutputSampleFile
 {
     bool finalized;
+    std::string filename;
     std::ofstream ofs;
     google::protobuf::io::OstreamOutputStream* oos;
 
@@ -33,6 +35,7 @@ public:
 class InputSampleFile
 {
     bool finalized;
+    std::string filename;
     std::ifstream ifs;
     google::protobuf::io::IstreamInputStream* iis;
 

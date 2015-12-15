@@ -54,7 +54,7 @@ void print_sample(const sample_file::Sample& sample)
     }
 }
 
-OutputSampleFile::OutputSampleFile(const string& filename) : finalized(false), ofs(filename, ios::binary)
+OutputSampleFile::OutputSampleFile(const string& filename) : filename(filename), finalized(false), ofs(filename, ios::binary)
 {
     if (ofs.fail())
         throw ios_base::failure("Could not open the sample file " + filename);
@@ -66,7 +66,7 @@ void OutputSampleFile::write_sample(const sample_file::Sample& sample)
 {
     bool ret =  writeDelimitedTo_custom(sample, oos);
     if (!ret)
-        throw ios_base::failure("Output error on sample file");
+        throw ios_base::failure("Output error on sample file " + filename);
 }
 
 void OutputSampleFile::finalize(void)
@@ -85,7 +85,7 @@ OutputSampleFile::~OutputSampleFile(void)
         finalize();
 }
 
-InputSampleFile::InputSampleFile(const string& filename) : finalized(false), ifs(filename, ios::binary)
+InputSampleFile::InputSampleFile(const string& filename) : filename(filename), finalized(false), ifs(filename, ios::binary)
 {
     if (ifs.fail())
         throw ios_base::failure("Could not open the sample file " + filename);
@@ -100,7 +100,7 @@ bool InputSampleFile::read_sample(sample_file::Sample& sample)
     const bool ret = readDelimitedFrom_custom(iis, &sample, &clean_eof);
 
     if (!ret && !clean_eof)
-        throw ios_base::failure("Input error on sample file");
+        throw ios_base::failure("Input error on sample file " + filename);
 
     return ret;
 }
