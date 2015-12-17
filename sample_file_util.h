@@ -15,7 +15,7 @@ sample_file::Sample make_dangling_sample(unsigned window_id, const sample_file::
 void print_memoryaccess(const sample_file::MemoryAccess& access);
 void print_sample(const sample_file::Sample& sample);
 
-class OutputSampleFile
+class SampleWriter
 {
     bool finalized;
     std::string filename;
@@ -23,16 +23,16 @@ class OutputSampleFile
     google::protobuf::io::OstreamOutputStream* oos;
 
 public:
-    OutputSampleFile(const std::string& filename);
-    OutputSampleFile(const OutputSampleFile&) = delete;
-    OutputSampleFile& operator=(const OutputSampleFile&) = delete;
+    SampleWriter(const std::string& filename);
+    SampleWriter(const SampleWriter&) = delete;
+    SampleWriter& operator=(const SampleWriter&) = delete;
 
     void write_sample(const sample_file::Sample& sample);
     void finalize(void);
-    ~OutputSampleFile();
+    ~SampleWriter();
 };
 
-class InputSampleFile
+class SampleReader
 {
     bool finalized;
     std::string filename;
@@ -40,11 +40,11 @@ class InputSampleFile
     google::protobuf::io::IstreamInputStream* iis;
 
 public:
-    InputSampleFile(const std::string& filename);
-    InputSampleFile(const InputSampleFile&) = delete;
-    InputSampleFile& operator=(const InputSampleFile&) = delete;
+    SampleReader(const std::string& filename);
+    SampleReader(const SampleReader&) = delete;
+    SampleReader& operator=(const SampleReader&) = delete;
 
     bool read_sample(sample_file::Sample&);
-    ~InputSampleFile();
+    ~SampleReader();
 };
 #endif

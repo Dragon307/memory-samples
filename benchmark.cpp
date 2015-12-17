@@ -51,7 +51,7 @@ int main(void)
     auto samples = generate_random_samples(nb_samples);
 
     const std::string filename = "benchmark_ofstream.output";
-    OutputSampleFile output_sample_file(filename);
+    SampleWriter output_sample_file(filename);
 
     auto start = chrono::system_clock::now();
 
@@ -67,7 +67,7 @@ int main(void)
 
     samples.clear();
 
-    InputSampleFile input_sample_file(filename);
+    SampleReader input_sample_file(filename);
 
     start = chrono::system_clock::now();
 

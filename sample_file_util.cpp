@@ -54,7 +54,7 @@ void print_sample(const sample_file::Sample& sample)
     }
 }
 
-OutputSampleFile::OutputSampleFile(const string& filename) : filename(filename), finalized(false), ofs(filename, ios::binary)
+SampleWriter::SampleWriter(const string& filename) : filename(filename), finalized(false), ofs(filename, ios::binary)
 {
     if (ofs.fail())
         throw ios_base::failure("Could not open the sample file " + filename);
@@ -62,14 +62,14 @@ OutputSampleFile::OutputSampleFile(const string& filename) : filename(filename),
     oos = new google::protobuf::io::OstreamOutputStream(&ofs);
 }
 
-void OutputSampleFile::write_sample(const sample_file::Sample& sample)
+void SampleWriter::write_sample(const sample_file::Sample& sample)
 {
     bool ret =  writeDelimitedTo_custom(sample, oos);
     if (!ret)
         throw ios_base::failure("Output error on sample file " + filename);
 }
 
-void OutputSampleFile::finalize(void)
+void SampleWriter::finalize(void)
 {
     if (!finalized)
     {
@@ -79,13 +79,13 @@ void OutputSampleFile::finalize(void)
     }
 }
 
-OutputSampleFile::~OutputSampleFile(void)
+SampleWriter::~SampleWriter(void)
 {
     if (!finalized)
         finalize();
 }
 
-InputSampleFile::InputSampleFile(const string& filename) : filename(filename), finalized(false), ifs(filename, ios::binary)
+SampleReader::SampleReader(const string& filename) : filename(filename), finalized(false), ifs(filename, ios::binary)
 {
     if (ifs.fail())
         throw ios_base::failure("Could not open the sample file " + filename);
@@ -93,7 +93,7 @@ InputSampleFile::InputSampleFile(const string& filename) : filename(filename), f
     iis = new google::protobuf::io::IstreamInputStream(&ifs);
 }
 
-bool InputSampleFile::read_sample(sample_file::Sample& sample)
+bool SampleReader::read_sample(sample_file::Sample& sample)
 {
     bool clean_eof;
 
@@ -105,7 +105,7 @@ bool InputSampleFile::read_sample(sample_file::Sample& sample)
     return ret;
 }
 
-InputSampleFile::~InputSampleFile(void)
+SampleReader::~SampleReader(void)
 {
     delete iis;
     ifs.close();
