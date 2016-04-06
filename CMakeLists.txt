@@ -1,4 +1,5 @@
 set (CMAKE_CXX_STANDARD 11)
+set(CMAKE_BUILD_TYPE "Release")
 find_package(Protobuf REQUIRED)
 
 protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS "memory_samples.proto")
