@@ -22,3 +22,10 @@ class SampleReader(object):
                 break
 
             yield msg
+
+class SampleWriter(object):
+    def __init__(self, filename):
+        self.file = open(filename, 'wb')
+
+    def write_sample(self, sample):
+        protobuf_util.writeDelimitedTo(sample, self.file)
