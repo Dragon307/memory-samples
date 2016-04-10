@@ -4,7 +4,7 @@ import sys
 import sample_file_util
 
 def stringify_memaccess(memaccess):
-    return "[tid: {}, pc: {}, addr: {}, time: {}, type: {}]".format(memaccess.thread_id, memaccess.program_counter, memaccess.memory_address, memaccess.access_counter, memaccess.access_type)
+    return "[tid: {}, pc: {:#x}, addr: {:#x}, time: {}, type: {}]".format(memaccess.thread_id, memaccess.program_counter, memaccess.memory_address, memaccess.access_counter, memaccess.access_type)
 
 def stringify_sample(sample):
     is_dangling = not sample.HasField("end")
