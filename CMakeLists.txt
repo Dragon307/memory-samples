@@ -28,9 +28,10 @@ target_link_libraries(memory_samples ${PROTOBUF_LIBRARY})
 add_executable(benchmark benchmark.cpp)
 target_link_libraries(benchmark memory_samples)
 
-set_target_properties(benchmark PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
 install(TARGETS benchmark memory_samples
         RUNTIME DESTINATION bin/memory_samples/examples
         LIBRARY DESTINATION lib)
 
 install(FILES ${PROTO_HDRS} sample_file_util.h protobuf_util.h DESTINATION include/memory_samples)
+
+add_subdirectory(python)
